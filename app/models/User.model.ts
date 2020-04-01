@@ -1,16 +1,15 @@
 import * as mongoose from "mongoose";
 
-import { IUser } from 'app/types';
+import { IUser } from "../types";
 
 const model = mongoose.model;
 const Schema = mongoose.Schema;
-
 
 const userSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  createdAt: String,
+  createdAt: String
 });
 
-export default model<IUser>('User', userSchema);
+export default model<IUser>("User", userSchema);

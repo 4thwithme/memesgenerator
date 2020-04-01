@@ -1,0 +1,31 @@
+.register-wrap, .login-wrap {
+  max-width: 540px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 40px);
+  top: 0;
+  z-index: 0;
+  flex-direction: column;
+  
+
+  .ui.form {
+    min-width: 300px;
+    background-color: rgba(255,255,255,.08);
+    padding: 20px;
+    border-radius: 3px;
+
+    .error.field {
+      position: relative;
+
+      .ui.pointing.prompt.label {
+        position: absolute;
+        z-index: 2;
+        bottom: -11px;
+        padding: 2px 11px
+      }
+    }
+  }
+  
+}
