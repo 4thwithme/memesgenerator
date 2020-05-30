@@ -1,0 +1,40 @@
+.home-wrap {
+  margin: auto;
+  max-width: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px 0;
+
+  & .ui.input>input {
+    padding: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  & .tag-wrap {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+
+    & .field {
+      flex-grow: 1;
+    }
+  }
+
+  .dropzone-wrapper {
+    outline: none;
+    cursor: pointer;
+    border: solid 3px transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+  }
+
+  .link-input-wrapper {
+    width: 100%;
+
+    & button {
+      height: 35px;
+    }
+  }
+}

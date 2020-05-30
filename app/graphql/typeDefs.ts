@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export default gql`
   type Query {
     getUsers: [User]
+    getMemes(authorId: String!, limit: Int!, offset: Int!): [Mem]
   }
 
   type User {
@@ -11,6 +12,20 @@ export default gql`
     email: String!
     token: String!
     createdAt: String!
+  }
+
+  type Mem {
+    id: ID!
+    file: String!
+    name: String!
+    memSrc: String!
+    createdAt: String!
+    authorId: String!
+    tags: [String]!
+  }
+
+  type IAddNewMemResponce {
+    res: Boolean!
   }
 
   input RegisterInput {
@@ -29,5 +44,15 @@ export default gql`
     register(registerInput: RegisterInput): User!
 
     login(username: String!, password: String!): User!
+
+    addNewMem(
+      file: Upload!
+      name: String!
+      internalUrl: String
+      memSrc: String!
+      createdAt: String!
+      authorId: String!
+      tags: [String]!
+    ): IAddNewMemResponce!
   }
 `;

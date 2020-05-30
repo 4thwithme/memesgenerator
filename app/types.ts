@@ -14,6 +14,35 @@ export interface IArgRegisterInput {
   registerInput: IRegisterInput;
 }
 
+export interface IMem extends mongoose.Document {
+  file: string;
+  name: string;
+  memSrc: string;
+  createdAt: string;
+  authorId: string;
+  tags: string[];
+}
+
+export interface IMemModel extends mongoose.Model<IMem> {
+  uploadFileToAWS(internalUrl: string | null, file: File, callback: (a: object) => void): string;
+}
+
+export interface IArgMemInfo {
+  file: any;
+  name: string;
+  memSrc: string;
+  createdAt: string;
+  authorId: string;
+  internalUrl: string | null;
+  tags: string[];
+}
+
+export interface IArgsGetMemes {
+  authorId: string;
+  limit: number;
+  offset: number;
+}
+
 export interface IUser extends mongoose.Document {
   username: string;
   password: string;
@@ -23,17 +52,6 @@ export interface IUser extends mongoose.Document {
 
 export interface IUserWithToken extends IUser {
   token: string;
-}
-
-export interface IComment {
-  body: string;
-  username: string;
-  createdAt: string;
-}
-
-export interface ILikes {
-  username: string;
-  createdAt: string;
 }
 
 export interface IValidationInput {

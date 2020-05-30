@@ -8,22 +8,23 @@ import "../../styles/RegisterPage.scss";
 import { isEmptyObject } from "../../client.utils";
 import QUERIES from "../../queries/queries";
 
-import { StringObect } from "../../client.types";
+import { StringObject } from "../../client.types";
 
 const LoginPage = () => {
-  const [asyncErrors, setAsyncErrors] = useState("");
+  const [asyncErrors, setAsyncErrors] = useState<StringObject[]>([]);
   const [inputValues, setInputValues] = useState({ isCanSubmit: false });
 
   const history = useHistory();
 
   const [loginUser, { loading }] = useMutation(QUERIES.LOGIN_USER, {
     update: (proxy, res) => {
-      localStorage.setItem("userInfo", JSON.stringify(res.data.register));
+      localStorage.setItem("userInfo", JSON.stringify(res.data.login));
       history.push("/");
     },
     onError: (err) => {
-      console.dir(err);
-      err.graphQLErrors && setAsyncErrors(err.graphQLErrors[0].message);
+      err.graphQLErrors[0] &&
+        err.graphQLErrors[0].extensions &&
+        setAsyncErrors([...asyncErrors, err.graphQLErrors[0].extensions.exception.errors]);
       setInputValues({ ...inputValues, isCanSubmit: false });
     },
     variables: inputValues
@@ -35,15 +36,16 @@ const LoginPage = () => {
       loginUser();
       setInputValues({ ...inputValues, isCanSubmit: false });
     }
+    // eslint-disable-next-line
   }, [inputValues.isCanSubmit]);
   //helper functions---------------------------------------------
 
-  const handleOnSubmit = (values: StringObect) => {
+  const handleOnSubmit = (values: StringObject) => {
     setInputValues({ ...values, isCanSubmit: true });
   };
 
-  const validate = (values: StringObect) => {
-    const errors: StringObect = {};
+  const validate = (values: StringObject) => {
+    const errors: StringObject = {};
 
     if (!values.username || values.username.trim().length === 0) {
       errors.username = "Fill username field";
@@ -64,7 +66,7 @@ const LoginPage = () => {
       <RFForm
         onSubmit={handleOnSubmit}
         validate={validate}
-        render={({ handleSubmit, form, submitting, pristine, values, errors }) => (
+        render={({ handleSubmit, errors }) => (
           <Form inverted size='large' onSubmit={handleSubmit} loading={loading}>
             <RFField name='username'>
               {({ input, meta: { error } }) => (
@@ -87,6 +89,7 @@ const LoginPage = () => {
                     {...input}
                     error={error ? { content: error } : null}
                     fluid
+                    type='password'
                     placeholder='Password'
                     id='form-input-password'
                   />
@@ -101,13 +104,15 @@ const LoginPage = () => {
         )}
       />
 
-      {asyncErrors.length ? (
+      {!!asyncErrors.length && (
         <div className='ui error message'>
           <ul className='list'>
-            <li>{asyncErrors}</li>
+            {asyncErrors.map((err, i) => (
+              <li key={i}>{Object.values(err)[0]}</li>
+            ))}
           </ul>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

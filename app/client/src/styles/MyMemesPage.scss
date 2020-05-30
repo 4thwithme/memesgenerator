@@ -1,0 +1,18 @@
+.mem-page-wrap {
+  max-width: 540px;
+  margin: auto;
+
+  .mem-card {
+    margin-bottom: 10px;
+  }
+
+  .mem-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .memes-list {
+    height: calc(100vh - 34px);
+  }
+}

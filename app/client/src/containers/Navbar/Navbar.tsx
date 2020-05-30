@@ -5,7 +5,8 @@ import { useHistory } from "react-router-dom";
 import "../../styles/Navbar.scss";
 
 const Navbar = () => {
-  const [activeItem, setActiveItem] = useState("home");
+  const [activeItem, setActiveItem] = useState<string>("home");
+  const [isLogin, setIsLogin] = useState<boolean>(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -14,16 +15,30 @@ const Navbar = () => {
       : "/";
 
     setActiveItem(item);
+
+    if (localStorage.getItem("userInfo")) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
   }, [history.location.pathname]);
 
   const handleItemClick = (e: any, name: string): void => {
     setActiveItem(name);
-    history.push(name);
+
+    if (name === "logout") {
+      if (window.confirm("Are you sure?")) {
+        localStorage.removeItem("userInfo");
+        history.push("login");
+      }
+    } else {
+      history.push(name);
+    }
   };
 
   return (
     <div className='navbar-wrap'>
-      <Menu size='mini' inverted borderless compact widths={3}>
+      <Menu size='mini' inverted borderless compact widths={isLogin ? 3 : 3}>
         <Menu.Item
           fitted='vertically'
           name='home'
@@ -31,20 +46,41 @@ const Navbar = () => {
           active={activeItem === "/"}
           onClick={(e) => handleItemClick(e, "/")}
         />
-        <Menu.Item
-          fitted='vertically'
-          name='Log In'
-          color='teal'
-          active={activeItem === "login"}
-          onClick={(e) => handleItemClick(e, "login")}
-        />
-        <Menu.Item
-          fitted='vertically'
-          name='Sign Up'
-          color='teal'
-          active={activeItem === "signup"}
-          onClick={(e) => handleItemClick(e, "signup")}
-        />
+        {isLogin ? (
+          <>
+            <Menu.Item
+              fitted='vertically'
+              name='memes'
+              color='teal'
+              active={activeItem === "memes"}
+              onClick={(e) => handleItemClick(e, "/memes")}
+            />
+            <Menu.Item
+              fitted='vertically'
+              name='Log Out'
+              color='red'
+              active={activeItem === "logout"}
+              onClick={(e) => handleItemClick(e, "logout")}
+            />
+          </>
+        ) : (
+          <>
+            <Menu.Item
+              fitted='vertically'
+              name='Log In'
+              color='teal'
+              active={activeItem === "login"}
+              onClick={(e) => handleItemClick(e, "login")}
+            />
+            <Menu.Item
+              fitted='vertically'
+              name='Sign Up'
+              color='teal'
+              active={activeItem === "signup"}
+              onClick={(e) => handleItemClick(e, "signup")}
+            />
+          </>
+        )}
       </Menu>
     </div>
   );

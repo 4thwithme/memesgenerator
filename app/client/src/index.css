@@ -17,4 +17,5 @@ code {
   background-color: rgb(19, 19, 19);
   height: 100vh;
   color: #fff;
+  overflow-y: scroll;
 }

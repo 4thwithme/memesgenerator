@@ -8,11 +8,11 @@ import { isEmptyObject } from "../../client.utils";
 import "../../styles/RegisterPage.scss";
 import QUERIES from "../../queries/queries";
 
-import { StringObect } from "../../client.types";
+import { StringObject } from "../../client.types";
 
 const RegisterPage = () => {
   const [inputValues, setInputValues] = useState({ isCanSubmit: false });
-  const [asyncErrors, setAsyncErrors] = useState([]);
+  const [asyncErrors, setAsyncErrors] = useState<StringObject[]>([]);
 
   const history = useHistory();
 
@@ -24,7 +24,7 @@ const RegisterPage = () => {
     onError: (err) => {
       err.graphQLErrors[0] &&
         err.graphQLErrors[0].extensions &&
-        setAsyncErrors(err.graphQLErrors[0].extensions.exeption.errors);
+        setAsyncErrors([...asyncErrors, err.graphQLErrors[0].extensions.exception.errors]);
       setInputValues({ ...inputValues, isCanSubmit: false });
     },
     variables: inputValues
@@ -35,15 +35,16 @@ const RegisterPage = () => {
     if (inputValues.isCanSubmit) {
       registerUser();
     }
+    // eslint-disable-next-line
   }, [inputValues.isCanSubmit]);
 
   //helper funtions-------------------------------------------
-  const handleOnSubmit = (values: StringObect) => {
+  const handleOnSubmit = (values: StringObject) => {
     setInputValues({ ...values, isCanSubmit: true });
   };
 
-  const validate = (values: StringObect) => {
-    const errors: StringObect = {};
+  const validate = (values: StringObject) => {
+    const errors: StringObject = {};
 
     if (!values.username || values.username.trim().length === 0) {
       errors.username = "Fill username field";
@@ -61,7 +62,7 @@ const RegisterPage = () => {
     if (!values.email || values.email.trim() === "") {
       errors.email = "Email should be not empty";
     } else {
-      const regEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const regEx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
       if (!values.email && !values.email.match(regEx)) {
         errors.email = "Email must be a valid";
@@ -147,7 +148,7 @@ const RegisterPage = () => {
         <div className='ui error message'>
           <ul className='list'>
             {asyncErrors.map((err, i) => (
-              <li key={i}>{err}</li>
+              <li key={i}>{Object.values(err)[0]}</li>
             ))}
           </ul>
         </div>

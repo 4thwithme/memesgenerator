@@ -2,8 +2,7 @@ import * as mongoose from "mongoose";
 
 import { IUser } from "../types";
 
-const model = mongoose.model;
-const Schema = mongoose.Schema;
+const { model, Schema } = mongoose;
 
 const userSchema = new Schema({
   username: String,
