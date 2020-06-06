@@ -4,7 +4,7 @@ import Dropzone from "react-dropzone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages } from "@fortawesome/free-solid-svg-icons";
 
-import { IPropsUploadZone } from "../types";
+import { IPropsUploadZone } from "../../client.types";
 
 const UploadZone = ({ setMem, handleUpload, handleUploadFromURL }: IPropsUploadZone) => {
   return (

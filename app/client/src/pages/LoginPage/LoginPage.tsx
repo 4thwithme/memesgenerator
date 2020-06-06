@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { Form as RFForm, Field as RFField } from "react-final-form";
-import { useHistory } from "react-router";
 import { useMutation } from "@apollo/react-hooks";
 
+import validate from "./validate";
 import "../../styles/RegisterPage.scss";
-import { isEmptyObject } from "../../client.utils";
 import QUERIES from "../../queries/queries";
+import { isEmptyObject } from "../../client.utils";
+import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 
 import { StringObject } from "../../client.types";
 
@@ -14,12 +15,12 @@ const LoginPage = () => {
   const [asyncErrors, setAsyncErrors] = useState<StringObject[]>([]);
   const [inputValues, setInputValues] = useState({ isCanSubmit: false });
 
-  const history = useHistory();
+  //create a context
+  const authContext = useContext(AuthContext);
 
   const [loginUser, { loading }] = useMutation(QUERIES.LOGIN_USER, {
-    update: (proxy, res) => {
-      localStorage.setItem("userInfo", JSON.stringify(res.data.login));
-      history.push("/");
+    update: (proxy, { data: { login } }) => {
+      authContext.login(login);
     },
     onError: (err) => {
       err.graphQLErrors[0] &&
@@ -42,23 +43,6 @@ const LoginPage = () => {
 
   const handleOnSubmit = (values: StringObject) => {
     setInputValues({ ...values, isCanSubmit: true });
-  };
-
-  const validate = (values: StringObject) => {
-    const errors: StringObject = {};
-
-    if (!values.username || values.username.trim().length === 0) {
-      errors.username = "Fill username field";
-    } else if (!values.username || values.username.trim().length < 3) {
-      errors.username = "username must be 3+ char";
-    }
-    if (!values.password || values.password.trim() === "") {
-      errors.password = "Fill password field";
-    } else if (!values.password || values.password.trim().length < 4) {
-      errors.password = "password must be 4+ char";
-    }
-
-    return errors;
   };
 
   return (

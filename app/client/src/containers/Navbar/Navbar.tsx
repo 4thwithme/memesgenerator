@@ -1,35 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Menu } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 
 import "../../styles/Navbar.scss";
+import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 
 const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
   const [activeItem, setActiveItem] = useState<string>("home");
-  const [isLogin, setIsLogin] = useState<boolean>(false);
   const history = useHistory();
 
+  const isLogin = user ? true : false;
+  console.log(user, isLogin);
+
+  const pathname = history.location.pathname;
+
   useEffect(() => {
-    const item = history.location.pathname.slice(1).length
-      ? history.location.pathname.slice(1)
-      : "/";
+    const item = pathname.slice(1).length ? pathname.slice(1) : "/";
 
     setActiveItem(item);
-
-    if (localStorage.getItem("userInfo")) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  }, [history.location.pathname]);
+  }, [pathname]);
 
   const handleItemClick = (e: any, name: string): void => {
     setActiveItem(name);
 
     if (name === "logout") {
       if (window.confirm("Are you sure?")) {
-        localStorage.removeItem("userInfo");
         history.push("login");
+
+        logout();
       }
     } else {
       history.push(name);
@@ -38,7 +37,7 @@ const Navbar = () => {
 
   return (
     <div className='navbar-wrap'>
-      <Menu size='mini' inverted borderless compact widths={isLogin ? 3 : 3}>
+      <Menu size='mini' inverted borderless compact widths={isLogin ? 3 : 4}>
         <Menu.Item
           fitted='vertically'
           name='home'
@@ -59,12 +58,19 @@ const Navbar = () => {
               fitted='vertically'
               name='Log Out'
               color='red'
-              active={activeItem === "logout"}
+              active
               onClick={(e) => handleItemClick(e, "logout")}
             />
           </>
         ) : (
           <>
+            <Menu.Item
+              fitted='vertically'
+              name='memes'
+              color='teal'
+              active={activeItem === "memes"}
+              onClick={(e) => handleItemClick(e, "/memes")}
+            />
             <Menu.Item
               fitted='vertically'
               name='Log In'

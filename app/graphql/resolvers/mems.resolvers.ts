@@ -4,8 +4,9 @@ import { IArgMemInfo, IArgsGetMemes } from "app/types";
 
 export default {
   Query: {
-    getMemes: (_: any, args: IArgsGetMemes) =>
-      Mem.find({ authorId: args.authorId })
+    getMemes: (_: any, { authorId, ...args }: IArgsGetMemes) =>
+      Mem.find(authorId === "all" ? {} : { authorId })
+        .sort({ createdAt: -1 })
         .skip(args.offset)
         .limit(args.limit)
         .then((res) => res)

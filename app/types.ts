@@ -31,7 +31,7 @@ export interface IArgMemInfo {
   file: any;
   name: string;
   memSrc: string;
-  createdAt: string;
+  createdAt: number;
   authorId: string;
   internalUrl: string | null;
   tags: string[];

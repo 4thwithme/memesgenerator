@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card, Icon, Image, Form, Button } from "semantic-ui-react";
 
-import LS from "../../client.utils/LS";
 import { useDidMount } from "../../hooks";
+import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 
-import { IPropsNewMemCard } from "../types";
+import { IPropsNewMemCard } from "../../client.types";
 
 const NewMemCard = ({
   mem,
@@ -14,19 +14,22 @@ const NewMemCard = ({
   isDisabled,
   handleSubmit
 }: IPropsNewMemCard) => {
+  const { user } = useContext(AuthContext);
+
   useDidMount(() => {
     return window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        setMem({
-          file: null,
-          url: null,
-          internalUrl: null,
-          name: "",
-          memSrc: "none",
-          createdAt: new Date().toLocaleDateString(),
-          authorId: LS.getItem("id"),
-          tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
-        });
+        user &&
+          setMem({
+            file: null,
+            url: null,
+            internalUrl: null,
+            name: "",
+            memSrc: "none",
+            createdAt: String(Date.now()),
+            authorId: user.id,
+            tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
+          });
       }
     });
   });
@@ -46,7 +49,7 @@ const NewMemCard = ({
         <Card.Meta>
           <span className='date'>{new Date().toLocaleDateString()}</span>
         </Card.Meta>
-        <Card.Description>Author: {LS.getItem("username") || "NoNemeNPC"}</Card.Description>
+        <Card.Description>Author: {user ? user.username : "NoNemeNPC"}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         {["1", "2", "3", "4", "5"].map((num) => {

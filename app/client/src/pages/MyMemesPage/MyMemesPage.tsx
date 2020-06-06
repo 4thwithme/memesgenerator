@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Dimmer, Loader, Card, Image, Icon } from "semantic-ui-react";
 import { useQuery } from "@apollo/react-hooks";
+import Scrollbars from "react-custom-scrollbars";
 
 import QUERIES from "../../queries/queries";
 import "../../styles/MyMemesPage.scss";
 import { LIMIT } from "../../client.utils/constants";
-import LS from "../../client.utils/LS";
+import { AuthContext } from "../../context/AuthProvider/AuthProvider";
+import convertToDate from "../../client.utils/convertToDate";
 
 import { IMem } from "../../client.types";
-import Scrollbars from "react-custom-scrollbars";
 
 const MyMemesPage = () => {
   const [memes, setMemes] = useState([]);
+  const { user } = useContext(AuthContext);
 
   const { loading, data, fetchMore } = useQuery(QUERIES.FETCH_MEMES_BY_AUTHOR_ID, {
-    variables: { authorId: LS.getItem("id"), limit: LIMIT, offset: 0 }
+    variables: { authorId: user ? user.id : "all", limit: LIMIT, offset: 0 }
   });
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const MyMemesPage = () => {
       console.log("upload new memes");
 
       fetchMore({
-        variables: { authorId: LS.getItem("id"), limit: LIMIT, offset: memes.length },
+        variables: { authorId: user ? user.id : "all", limit: LIMIT, offset: memes.length },
         updateQuery: (prevData, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prevData;
           return Object.assign({}, prevData, {
@@ -57,10 +59,10 @@ const MyMemesPage = () => {
                     <Card.Content>
                       <Card.Header className='mem-name'>{mem.name.toUpperCase()}</Card.Header>
                       <Card.Meta>
-                        <span className='date'>{mem.createdAt}</span>
+                        <span className='date'>{convertToDate(mem.createdAt)}</span>
                       </Card.Meta>
                       <Card.Description>
-                        Author: {LS.getItem("username") || "NoNemeNPC"}
+                        Author: {user ? user.username : "NoNemeNPC"}
                       </Card.Description>
                     </Card.Content>
                     <Card.Content extra>
@@ -68,7 +70,6 @@ const MyMemesPage = () => {
                         return (
                           <div className='tag-wrap' key={i}>
                             <Icon size='small' name='hashtag' />
-
                             <span>{tag}</span>
                           </div>
                         );

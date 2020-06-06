@@ -1,3 +1,5 @@
+import { DropEvent } from "react-dropzone";
+
 export interface StringObject {
   [key: string]: string;
 }
@@ -43,4 +45,25 @@ export interface IUser extends StringObject {}
 export interface IAction {
   type: string;
   payload?: any;
+}
+
+export interface IAuthContext {
+  user: null | IUser;
+  login: (userData: IUser) => void;
+  logout: () => void;
+}
+
+export interface IPropsUploadZone {
+  setMem: (some: any) => void;
+  handleUpload: <T extends File>(acceptedFiles: T[], rejectedFiles: T[], event: DropEvent) => void;
+  handleUploadFromURL: (url: string) => void;
+}
+
+export interface IPropsNewMemCard {
+  mem: IMemUpload;
+  handleOnNameChange: (e: any) => void;
+  handleOnTagChange: (e: any, num: string) => void;
+  isDisabled: () => boolean;
+  handleSubmit: () => void;
+  setMem: (some: any) => void;
 }
