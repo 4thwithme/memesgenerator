@@ -1,3 +1,4 @@
 import isEmptyObject from "./isEmptyObject";
+import lazyComponents from "./lazyComponents";
 
-export { isEmptyObject };
+export { isEmptyObject, lazyComponents };

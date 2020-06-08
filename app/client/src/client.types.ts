@@ -7,6 +7,9 @@ export interface StringObject {
 export interface AnyObject {
   [key: string]: any;
 }
+export interface NumberObject {
+  [key: string]: number;
+}
 
 export interface IValidationError extends StringObject {}
 
@@ -66,4 +69,20 @@ export interface IPropsNewMemCard {
   isDisabled: () => boolean;
   handleSubmit: () => void;
   setMem: (some: any) => void;
+}
+
+export interface IMemesCreatorProps {
+  src: string | null;
+}
+
+export interface IModalWrapperProps {
+  children: JSX.Element;
+}
+
+export type IModal = { name: string; props: AnyObject };
+
+export interface IModalContext {
+  modalsList: IModal[];
+  addModal: (name: string, props: AnyObject) => void;
+  removeModal: (name: string) => void;
 }

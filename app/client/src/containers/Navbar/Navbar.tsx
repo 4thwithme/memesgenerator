@@ -11,8 +11,6 @@ const Navbar = () => {
   const history = useHistory();
 
   const isLogin = user ? true : false;
-  console.log(user, isLogin);
-
   const pathname = history.location.pathname;
 
   useEffect(() => {
@@ -27,7 +25,6 @@ const Navbar = () => {
     if (name === "logout") {
       if (window.confirm("Are you sure?")) {
         history.push("login");
-
         logout();
       }
     } else {

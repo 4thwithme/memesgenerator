@@ -1,7 +1,9 @@
 import React from "react";
 
-const MemesCreator = () => {
-  return <div>MemesCreator wil be here</div>;
+import { IMemesCreatorProps } from "../../client.types";
+
+const MemesCreator = ({ src }: IMemesCreatorProps) => {
+  return <div className='memes-creator'>{src && <img src={src} />}</div>;
 };
 
 export default MemesCreator;

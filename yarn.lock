@@ -435,6 +435,13 @@
   dependencies:
     react-dropzone "*"
 
+"@types/react-easy-crop@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@types/react-easy-crop/-/react-easy-crop-1.16.0.tgz#5d2813d8e002429a39ec6cf0f5d524185396289a"
+  integrity sha512-59TJn5pcNFPr9jQM4yDUDh6r2HIeXA5e3nDui44yScTve8+6qYo6Z4Jfmua+ULGh7w1eSueu3SwjJ6NB7k7Sng==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-router-dom@^5.1.3":
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-5.1.3.tgz#b5d28e7850bd274d944c0fbbe5d57e6b30d71196"
@@ -3110,6 +3117,13 @@ react-dropzone@*, react-dropzone@^10.2.2:
     file-selector "^0.1.12"
     prop-types "^15.7.2"
 
+react-easy-crop@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-easy-crop/-/react-easy-crop-3.0.1.tgz#d3f49dd2f1ac1b81c9d657a71c5f84b907e0c5d0"
+  integrity sha512-/jYq4uD1zHvbWKBIerYGZnGooLZdG/ANlNxQ4iYg1QZg2r1Um6BLY0wphWVeprVvI5Elxvg3wFjIuucMNAnYZQ==
+  dependencies:
+    tslib "1.11.2"
+
 react-final-form@^6.3.5:
   version "6.3.5"
   resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-6.3.5.tgz#772781071d26d26493b0c8ef4f97f76f06fc1c0f"
@@ -3820,6 +3834,11 @@ ts-node@^8.6.2:
     make-error "^1.1.1"
     source-map-support "^0.5.6"
     yn "3.1.1"
+
+tslib@1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.2.tgz#9c79d83272c9a7aaf166f73915c9667ecdde3cc9"
+  integrity sha512-tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==
 
 tslib@^1.10.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.11.1"
