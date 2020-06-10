@@ -86,3 +86,11 @@ export interface IModalContext {
   addModal: (name: string, props: AnyObject) => void;
   removeModal: (name: string) => void;
 }
+
+export interface IRangeProps {
+  classNamePrefix: string;
+  min: number;
+  max: number;
+  onUpdate: (value: number) => void;
+  currentValue: number;
+}

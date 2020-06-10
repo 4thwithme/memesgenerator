@@ -1,0 +1,37 @@
+.memes-creator {
+  background-color: #fff;
+  border-radius: 4px;
+
+  &__header, &__control {
+    padding: 5px 15px;
+    position: relative;
+  }
+
+  &__close {
+    margin-left: auto;
+    z-index: 999;
+    position: absolute;
+    right: 5px;
+    top: 8px;
+    cursor: pointer;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__img {
+    height: 600px;
+    width: 600px;
+    position: relative;
+
+    .reactEasyCrop_CropArea {
+      width: 600px !important;
+      height: 600px !important;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+}

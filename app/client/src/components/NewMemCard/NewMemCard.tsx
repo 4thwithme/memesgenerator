@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Card, Icon, Image, Form, Button } from "semantic-ui-react";
 
-import { useDidMount, useToggle } from "../../hooks";
+import { useDidMount } from "../../hooks";
 import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 
 import { IPropsNewMemCard } from "../../client.types";
@@ -17,9 +17,7 @@ const NewMemCard = ({
   handleSubmit
 }: IPropsNewMemCard) => {
   const { user } = useContext(AuthContext);
-  const { addModal, removeModal } = useContext(ModalContext);
-
-  const [isOpenMemesCreator, toggleMemesCreator] = useToggle(false);
+  const { addModal } = useContext(ModalContext);
 
   useDidMount(() => {
     return window.addEventListener("keydown", (e) => {
@@ -39,14 +37,6 @@ const NewMemCard = ({
     });
   });
 
-  useEffect(() => {
-    if (isOpenMemesCreator !== undefined) {
-      isOpenMemesCreator
-        ? addModal(MODAL_NAME.MEMES_CREATOR, { src: mem.internalUrl || mem.url })
-        : removeModal(MODAL_NAME.MEMES_CREATOR);
-    }
-  }, [isOpenMemesCreator]);
-
   return (
     <Card fluid>
       <Image
@@ -54,7 +44,7 @@ const NewMemCard = ({
         wrapped
         ui={false}
         style={{ cursor: "pointer" }}
-        onClick={() => toggleMemesCreator()}
+        onClick={() => addModal(MODAL_NAME.MEMES_CREATOR, { src: mem.internalUrl || mem.url })}
       />
       <Card.Content>
         <Card.Header>
