@@ -94,3 +94,8 @@ export interface IRangeProps {
   onUpdate: (value: number) => void;
   currentValue: number;
 }
+
+export interface ISelectedItem {
+  value: any;
+  label: "string";
+}

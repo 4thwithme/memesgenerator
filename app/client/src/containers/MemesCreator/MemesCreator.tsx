@@ -1,11 +1,21 @@
 import React, { useReducer, useState, useContext } from "react";
 import { Button, Icon } from "semantic-ui-react";
 import Cropper from "react-easy-crop";
+import Select from "react-select";
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
 
 import "../../styles/MemesCreator.scss";
-import { MODAL_NAME } from "../../client.utils/constants";
+import { MODAL_NAME, WINDOW_ASPECTS, WINDOW_SHAPE } from "../../client.utils/constants";
 import { ModalContext } from "../../context/ModalProvider/ModalProvider";
-import settingsReducer, { initialState, CROP, ZOOM } from "./MemesCreator.reducer";
+import settingsReducer, {
+  initialState,
+  CROP,
+  ZOOM,
+  ASPECT,
+  CROP_SHAPE,
+  SHOW_GRID
+} from "./MemesCreator.reducer";
 
 import { IMemesCreatorProps } from "../../client.types";
 import Range from "../../components/Range/Range";
@@ -54,10 +64,50 @@ const MemesCreator = ({ src }: IMemesCreatorProps) => {
           currentValue={settings.zoom}
           onUpdate={(z) => onUpdateHandler(z)}
         />
-        <Button>1</Button>
-        <Button>2</Button>
-        <Button>3</Button>
-        <Button>4</Button>
+
+        <div className='memes-creator__control-line'>
+          <div className='memes-creator__control-block'>
+            <Select
+              options={WINDOW_ASPECTS}
+              isSearchable
+              defaultValue={WINDOW_ASPECTS.length ? WINDOW_ASPECTS[0] : []}
+              onChange={(selectedItem: any) =>
+                dispatch({ type: ASPECT, payload: selectedItem.value })
+              }
+              className='select-aspect__wrap'
+              classNamePrefix='select-aspect'
+            />
+            <span>Ratio</span>
+          </div>
+
+          <div className='memes-creator__control-block'>
+            <Select
+              options={WINDOW_SHAPE}
+              isSearchable
+              defaultValue={WINDOW_SHAPE.length ? WINDOW_SHAPE[0] : []}
+              onChange={(selectedItem: any) =>
+                dispatch({ type: CROP_SHAPE, payload: selectedItem.value })
+              }
+              className='select-shape__wrap'
+              classNamePrefix='select-shape'
+            />
+            <span>Shape</span>
+          </div>
+
+          <label htmlFor='cheese-status'>
+            <Toggle
+              id='cheese-status'
+              defaultChecked={settings.showGrid}
+              onChange={() => dispatch({ type: SHOW_GRID, payload: !settings.showGrid })}
+            />
+            <span>Show grid</span>
+          </label>
+        </div>
+
+        <div className='memes-creator__control-btns'>
+          <Button color='red'>Discard</Button>
+          <Button color='teal'>Crop</Button>
+        </div>
       </div>
     </div>
   );

@@ -7,6 +7,42 @@
     position: relative;
   }
 
+  &__control-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+    .select-aspect__wrap {
+      width: 70px;
+    }
+
+    .select-shape__wrap {
+      width: 100px;
+    }
+  }
+
+  .range__slider {
+    padding: 10px;
+  }
+
+  &__control-btns {
+    display: flex;
+    align-items: center;
+    & .button {
+      width: 50%;
+    }
+  }
+
+  &__control-block, & label {
+    display: flex;
+    align-items: center;
+
+    & span {
+      margin: 0px 5px;
+    }
+  }
+
   &__close {
     margin-left: auto;
     z-index: 999;
@@ -23,13 +59,14 @@
   }
 
   &__img {
-    height: 600px;
-    width: 600px;
+    height: 500px;
+    width: 500px;
     position: relative;
+    background-color: #000;
 
     .reactEasyCrop_CropArea {
-      width: 600px !important;
-      height: 600px !important;
+      // width: 600px !important;
+      // height: 600px !important;
       border-top: 1px solid #ddd;
       border-bottom: 1px solid #ddd;
     }

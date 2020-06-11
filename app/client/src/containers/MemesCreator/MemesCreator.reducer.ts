@@ -1,3 +1,5 @@
+import { WINDOW_ASPECTS, WINDOW_SHAPE } from "../../client.utils/constants";
+
 import { IAction } from "../../client.types";
 
 export const CROP = "crop";
@@ -15,9 +17,9 @@ interface IInitialState {
 }
 
 export const initialState: IInitialState = {
-  aspect: 1,
+  aspect: WINDOW_ASPECTS[0].value,
   zoom: 1,
-  cropShape: "rect",
+  cropShape: WINDOW_SHAPE[0].value,
   showGrid: true,
   crop: {
     x: 0,
