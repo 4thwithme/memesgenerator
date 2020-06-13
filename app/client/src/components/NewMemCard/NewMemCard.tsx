@@ -14,25 +14,27 @@ const NewMemCard = ({
   handleOnNameChange,
   handleOnTagChange,
   isDisabled,
-  handleSubmit
+  handleSubmit,
+  setPrevFile,
+  prevFile
 }: IPropsNewMemCard) => {
   const { user } = useContext(AuthContext);
   const { addModal } = useContext(ModalContext);
 
   useDidMount(() => {
     return window.addEventListener("keydown", (e) => {
+      console.log("Escape");
       if (e.key === "Escape") {
-        user &&
-          setMem({
-            file: null,
-            url: null,
-            internalUrl: null,
-            name: "",
-            memSrc: "none",
-            createdAt: String(Date.now()),
-            authorId: user.id,
-            tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
-          });
+        setMem({
+          file: null,
+          url: null,
+          internalUrl: null,
+          name: "",
+          memSrc: "none",
+          createdAt: String(Date.now()),
+          authorId: user ? user.id : "none",
+          tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
+        });
       }
     });
   });
@@ -44,8 +46,17 @@ const NewMemCard = ({
         wrapped
         ui={false}
         style={{ cursor: "pointer" }}
-        onClick={() => addModal(MODAL_NAME.MEMES_CREATOR, { src: mem.internalUrl || mem.url })}
+        onClick={() =>
+          addModal(MODAL_NAME.MEMES_CREATOR, { src: mem.internalUrl || mem.url, setMem })
+        }
       />
+
+      {!!prevFile && (
+        <Button fluid color='purple' onClick={() => setPrevFile()} className='use-previous'>
+          use previous
+        </Button>
+      )}
+
       <Card.Content>
         <Card.Header>
           <Form.Input

@@ -8,13 +8,13 @@
 
   &__track-before, &__track-after {
     height: 4px;
-    background-color: #bdbdbd;
+    background-color: #4d4d4d;
     width: 100%;
     cursor: pointer;
   }
 
   &__track-before {
-    background-color: #2d90f2;
+    background-color: #00b5ad;
     height: 4px;
     position: relative;
   }
@@ -23,7 +23,7 @@
     border-radius: 50%;
     height: 12px;
     width: 12px;
-    background-color: #666666;
+    background-color: #444;
     position: absolute;
     right: -3px;
     top: -3px;

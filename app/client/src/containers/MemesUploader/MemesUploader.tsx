@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { Dimmer, Loader } from "semantic-ui-react";
 import { useMutation } from "@apollo/react-hooks";
 
@@ -9,6 +9,7 @@ import NewMemCard from "../../components/NewMemCard/NewMemCard";
 import UploadZone from "../../components/UploadZone/UploadZone";
 
 import { IMemUpload } from "../../client.types";
+import { usePrevious } from "../../hooks";
 
 const MemesUploader = () => {
   const { user } = useContext(AuthContext);
@@ -23,6 +24,19 @@ const MemesUploader = () => {
     authorId: user ? user.id : "none",
     tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
   });
+
+  const prevFile = usePrevious(mem.file);
+  const prevURL = usePrevious(mem.url);
+
+  const setPrevFile = useCallback(() => {
+    if (prevFile && prevURL) {
+      setMem((prev) => ({
+        ...prev,
+        file: prevFile,
+        url: prevURL
+      }));
+    }
+  }, [mem.file]);
 
   const [addNewMem, { loading }] = useMutation(QUERIES.ADD_NEW_MEM, {
     update: () => {
@@ -108,6 +122,8 @@ const MemesUploader = () => {
         <NewMemCard
           setMem={setMem}
           mem={mem}
+          prevFile={prevFile}
+          setPrevFile={setPrevFile}
           handleOnNameChange={handleOnNameChange}
           handleOnTagChange={handleOnTagChange}
           isDisabled={isDisabled}

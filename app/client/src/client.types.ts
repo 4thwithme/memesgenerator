@@ -63,7 +63,9 @@ export interface IPropsUploadZone {
 }
 
 export interface IPropsNewMemCard {
+  prevFile: string | ArrayBuffer | null;
   mem: IMemUpload;
+  setPrevFile: () => void;
   handleOnNameChange: (e: any) => void;
   handleOnTagChange: (e: any, num: string) => void;
   isDisabled: () => boolean;
@@ -73,6 +75,7 @@ export interface IPropsNewMemCard {
 
 export interface IMemesCreatorProps {
   src: string | null;
+  setMem: (some: any) => void;
 }
 
 export interface IModalWrapperProps {
@@ -98,4 +101,11 @@ export interface IRangeProps {
 export interface ISelectedItem {
   value: any;
   label: "string";
+}
+
+export interface ICroppedAreaPixels {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
