@@ -12,7 +12,7 @@ const ModalHub = () => {
   const modalRoot = document.getElementById("modal-root");
 
   const renderModal = (modalObject: IModal) => {
-    const Component: any = lazyComponents.LazyMemesCreator;
+    const Component: any = lazyComponents[modalObject.name];
 
     return <Component key={modalObject.name} {...modalObject.props} />;
   };

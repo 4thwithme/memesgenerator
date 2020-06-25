@@ -57,25 +57,24 @@ export interface IAuthContext {
 }
 
 export interface IPropsUploadZone {
-  setMem: (some: any) => void;
+  setMem: React.Dispatch<React.SetStateAction<IMemUpload>>;
   handleUpload: <T extends File>(acceptedFiles: T[], rejectedFiles: T[], event: DropEvent) => void;
   handleUploadFromURL: (url: string) => void;
 }
 
 export interface IPropsNewMemCard {
-  prevFile: string | ArrayBuffer | null;
   mem: IMemUpload;
-  setPrevFile: () => void;
+  setMem: React.Dispatch<React.SetStateAction<IMemUpload>>;
   handleOnNameChange: (e: any) => void;
   handleOnTagChange: (e: any, num: string) => void;
   isDisabled: () => boolean;
   handleSubmit: () => void;
-  setMem: (some: any) => void;
 }
 
 export interface IMemesCreatorProps {
   src: string | null;
-  setMem: (some: any) => void;
+  setMem: React.Dispatch<React.SetStateAction<IMemUpload>>;
+  setActiveTool: (tool: string | null) => void;
 }
 
 export interface IModalWrapperProps {
@@ -108,4 +107,18 @@ export interface ICroppedAreaPixels {
   y: number;
   width: number;
   height: number;
+  aspect?: number | undefined;
+  utit?: string;
 }
+
+export interface IMemText {
+  isActive: boolean;
+  id: number;
+  coords: { x: number; y: number };
+  text: string;
+  fontSize: number | string;
+  color: string;
+  maxWidth: number;
+}
+
+export type IActiveTool = "text" | "crop" | "square" | null;

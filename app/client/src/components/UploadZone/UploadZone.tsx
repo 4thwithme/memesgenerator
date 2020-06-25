@@ -31,7 +31,7 @@ const UploadZone = ({ setMem, handleUpload, handleUploadFromURL }: IPropsUploadZ
       <Dropzone onDrop={handleUpload}>
         {({ getRootProps, getInputProps }) => (
           <div {...getRootProps()} className='dropzone-wrapper'>
-            <input {...getInputProps()} />
+            <input {...getInputProps()} accept='image/*' />
             <Segment circular style={{ width: 540, height: 540 }}>
               <FontAwesomeIcon icon={faImages} color='#000' size='4x' />
               <Header as='h2'>

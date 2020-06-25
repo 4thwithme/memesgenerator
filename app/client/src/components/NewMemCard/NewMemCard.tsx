@@ -1,12 +1,23 @@
-import React, { useContext } from "react";
-import { Card, Icon, Image, Form, Button } from "semantic-ui-react";
+import React, { useContext, useState, useReducer, useRef, useEffect } from "react";
+import { Card, Icon, Form, Button } from "semantic-ui-react";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 import { useDidMount } from "../../hooks";
 import { AuthContext } from "../../context/AuthProvider/AuthProvider";
+import settingsReducer, {
+  initialState,
+  CROP,
+  DISCARD,
+  SET_IMAGE_PARAMS
+} from "./NewMemCard.reducer";
 
-import { IPropsNewMemCard } from "../../client.types";
-import { ModalContext } from "../../context/ModalProvider/ModalProvider";
-import { MODAL_NAME } from "../../client.utils/constants";
+import ToolControl from "./components/ToolControl";
+import ToolKits from "./components/ToolKits";
+import MemTextList from "../../containers/MemesCreator/components/MemTextList";
+import { drawNewImage } from "../../client.utils";
+
+import { IPropsNewMemCard, IActiveTool, IMemText } from "../../client.types";
 
 const NewMemCard = ({
   mem,
@@ -14,16 +25,24 @@ const NewMemCard = ({
   handleOnNameChange,
   handleOnTagChange,
   isDisabled,
-  handleSubmit,
-  setPrevFile,
-  prevFile
+  handleSubmit
 }: IPropsNewMemCard) => {
   const { user } = useContext(AuthContext);
-  const { addModal } = useContext(ModalContext);
+  const [activeTool, setActiveTool] = useState<IActiveTool>(null);
+
+  //for cropp
+  const [settings, dispatch] = useReducer(settingsReducer, initialState);
+
+  //for meme texts
+  const [textList, setTextList] = useState<IMemText[]>([]);
+
+  const croperRef: any = useRef();
+
+  const src = mem.internalUrl || mem.url;
 
   useDidMount(() => {
+    // escape press -> discard current mem and back to loading compoennt
     return window.addEventListener("keydown", (e) => {
-      console.log("Escape");
       if (e.key === "Escape") {
         setMem({
           file: null,
@@ -39,23 +58,70 @@ const NewMemCard = ({
     });
   });
 
+  useEffect(() => {
+    if (activeTool === "crop") {
+      croperRef.current.cropSelectRef.style.zIndex = 44;
+    } else {
+      croperRef.current.cropSelectRef && (croperRef.current.cropSelectRef.style.zIndex = 0);
+    }
+  }, [activeTool]);
+
+  const updateImage = async () => {
+    if (src) {
+      const { file, url }: any = await drawNewImage(
+        src,
+        settings.imageParams,
+        settings.crop,
+        textList
+      );
+
+      dispatch({ type: DISCARD });
+      setTextList([]);
+
+      setMem((prev) => ({
+        ...prev,
+        file,
+        url
+      }));
+    }
+
+    setActiveTool(null);
+  };
+
+  const setImageParams = () =>
+    dispatch({
+      type: SET_IMAGE_PARAMS,
+      payload: {
+        width: croperRef.current.imageRef.offsetWidth,
+        height: croperRef.current.imageRef.offsetHeight
+      }
+    });
+
   return (
     <Card fluid>
-      <Image
-        src={mem.internalUrl || mem.url}
-        wrapped
-        ui={false}
-        style={{ cursor: "pointer" }}
-        onClick={() =>
-          addModal(MODAL_NAME.MEMES_CREATOR, { src: mem.internalUrl || mem.url, setMem })
-        }
+      <div className='img-crop__wrap'>
+        {src && (
+          <ReactCrop
+            crossorigin='anonymous'
+            ref={croperRef}
+            onImageLoaded={() => setImageParams()}
+            disabled={activeTool !== "crop"}
+            src={src}
+            crop={settings.crop}
+            onComplete={(crop) => dispatch({ type: CROP, payload: crop })}
+            onChange={(crop) => dispatch({ type: CROP, payload: crop })}
+          />
+        )}
+        <MemTextList croperRef={croperRef} textList={textList} setTextList={setTextList} />
+      </div>
+
+      <ToolControl
+        activeTool={activeTool}
+        setActiveTool={setActiveTool}
+        updateImage={updateImage}
       />
 
-      {!!prevFile && (
-        <Button fluid color='purple' onClick={() => setPrevFile()} className='use-previous'>
-          use previous
-        </Button>
-      )}
+      <ToolKits activeTool={activeTool} setTextList={setTextList} />
 
       <Card.Content>
         <Card.Header>
