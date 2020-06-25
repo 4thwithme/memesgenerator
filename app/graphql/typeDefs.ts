@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 export default gql`
   type Query {
     getUsers: [User]
-    getMemes(authorId: String!, limit: Int!, offset: Int!): [Mem]
+    getMemes(author: String!, limit: Int!, offset: Int!): [Mem]
   }
 
   type User {
@@ -14,17 +14,22 @@ export default gql`
     createdAt: String!
   }
 
+  type PopulatedUser {
+    id: ID!
+    username: String!
+  }
+
   type Mem {
     id: ID!
     file: String!
     name: String!
     memSrc: String!
     createdAt: String!
-    authorId: String!
+    author: PopulatedUser
     tags: [String]!
   }
 
-  type IAddNewMemResponce {
+  type AddNewMemResponce {
     res: Boolean!
   }
 
@@ -51,8 +56,8 @@ export default gql`
       internalUrl: String
       memSrc: String!
       createdAt: String!
-      authorId: String!
+      author: String!
       tags: [String]!
-    ): IAddNewMemResponce!
+    ): AddNewMemResponce!
   }
 `;

@@ -14,14 +14,14 @@ const MemSchema = new Schema({
   name: { type: String, required: true },
   memSrc: { type: String, required: true },
   createdAt: { type: String, required: true },
-  authorId: { type: Schema.Types.ObjectId || null, required: true },
+  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   tags: [{ type: String, required: true }]
 });
 
 MemSchema.statics.uploadFileToAWS = (
   internalUrl: string | null,
   file: any,
-  callback: (a: object) => void
+  callback: (res: object) => void
 ): void => {
   if (internalUrl) {
     console.log(internalUrl);
@@ -50,9 +50,7 @@ MemSchema.statics.uploadFileToAWS = (
     const base = file.split("base64,")[1];
 
     fs.writeFile(DEST, base, { encoding: "base64" }, async (err) => {
-      if (err) {
-        console.error(err);
-      }
+      if (err) console.error(err);
 
       awsHelper.uploadFile(DEST, (res) => {
         callback(res);

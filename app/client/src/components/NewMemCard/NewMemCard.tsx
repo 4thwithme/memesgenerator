@@ -51,7 +51,7 @@ const NewMemCard = ({
           name: "",
           memSrc: "none",
           createdAt: String(Date.now()),
-          authorId: user ? user.id : "none",
+          author: user ? user.id : null,
           tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
         });
       }

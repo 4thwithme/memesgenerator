@@ -19,7 +19,7 @@ export interface IMem extends mongoose.Document {
   name: string;
   memSrc: string;
   createdAt: string;
-  authorId: string;
+  author: string | IUser;
   tags: string[];
 }
 
@@ -32,13 +32,13 @@ export interface IArgMemInfo {
   name: string;
   memSrc: string;
   createdAt: number;
-  authorId: string;
+  author: string;
   internalUrl: string | null;
   tags: string[];
 }
 
 export interface IArgsGetMemes {
-  authorId: string;
+  author: string;
   limit: number;
   offset: number;
 }

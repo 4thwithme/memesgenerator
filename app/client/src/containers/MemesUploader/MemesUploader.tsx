@@ -20,7 +20,7 @@ const MemesUploader = () => {
     name: "",
     memSrc: "none",
     createdAt: String(Date.now()),
-    authorId: user ? user.id : "none",
+    author: user ? user.id : null,
     tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
   });
 
@@ -33,7 +33,7 @@ const MemesUploader = () => {
         name: "",
         memSrc: "none",
         createdAt: String(Date.now()),
-        authorId: user ? user.id : "none",
+        author: user ? user.id : null,
         tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
       });
     },
@@ -85,7 +85,6 @@ const MemesUploader = () => {
 
   const isDisabled = () =>
     mem.name.length &&
-    mem.authorId &&
     mem.file &&
     mem.createdAt &&
     mem.tags["1"].length &&

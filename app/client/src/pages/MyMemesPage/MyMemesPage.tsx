@@ -16,7 +16,7 @@ const MyMemesPage = () => {
   const { user } = useContext(AuthContext);
 
   const { loading, data, fetchMore } = useQuery(QUERIES.FETCH_MEMES_BY_AUTHOR_ID, {
-    variables: { authorId: user ? user.id : "all", limit: LIMIT, offset: 0 }
+    variables: { author: user ? user.id : "all", limit: LIMIT, offset: 0 }
   });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const MyMemesPage = () => {
       console.log("upload new memes");
 
       fetchMore({
-        variables: { authorId: user ? user.id : "all", limit: LIMIT, offset: memes.length },
+        variables: { author: user ? user.id : "all", limit: LIMIT, offset: memes.length },
         updateQuery: (prevData, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prevData;
           return Object.assign({}, prevData, {
@@ -62,7 +62,10 @@ const MyMemesPage = () => {
                         <span className='date'>{convertToDate(mem.createdAt)}</span>
                       </Card.Meta>
                       <Card.Description>
-                        Author: {user ? user.username : "NoNemeNPC"}
+                        Author:{" "}
+                        {typeof mem.author === "object" && mem.author
+                          ? mem.author.username
+                          : "NoNameNPC"}
                       </Card.Description>
                     </Card.Content>
                     <Card.Content extra>

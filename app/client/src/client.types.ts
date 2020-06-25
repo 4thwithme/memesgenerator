@@ -29,7 +29,7 @@ export interface IMemUpload {
   name: string;
   memSrc: "none";
   createdAt: string;
-  authorId: string;
+  author: string | null;
   tags: StringObject;
 }
 
@@ -39,7 +39,7 @@ export interface IMem {
   name: string;
   memSrc: string;
   createdAt: string;
-  authorId: string;
+  author: string | { id: string; username: string } | null;
   tags: StringObject;
 }
 

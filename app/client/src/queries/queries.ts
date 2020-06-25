@@ -43,7 +43,7 @@ const ADD_NEW_MEM = gql`
     $internalUrl: String
     $memSrc: String!
     $createdAt: String!
-    $authorId: String!
+    $author: String!
     $tags: [String]!
   ) {
     addNewMem(
@@ -52,7 +52,7 @@ const ADD_NEW_MEM = gql`
       internalUrl: $internalUrl
       memSrc: $memSrc
       createdAt: $createdAt
-      authorId: $authorId
+      author: $author
       tags: $tags
     ) {
       res
@@ -61,13 +61,16 @@ const ADD_NEW_MEM = gql`
 `;
 
 const FETCH_MEMES_BY_AUTHOR_ID = gql`
-  query getMemes($authorId: String!, $limit: Int!, $offset: Int!) {
-    getMemes(authorId: $authorId, limit: $limit, offset: $offset) {
+  query getMemes($author: String!, $limit: Int!, $offset: Int!) {
+    getMemes(author: $author, limit: $limit, offset: $offset) {
       id
       name
       tags
       createdAt
-      authorId
+      author {
+        id
+        username
+      }
       file
       memSrc
     }
