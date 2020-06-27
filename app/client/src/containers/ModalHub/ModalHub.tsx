@@ -2,10 +2,12 @@ import React, { useContext } from "react";
 
 import ReactDOM from "react-dom";
 
+import { lazyComponents } from "../../client.utils";
+
 import { ModalContext } from "../../context/ModalProvider/ModalProvider";
 import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+
 import { IModal } from "../../client.types";
-import { lazyComponents } from "../../client.utils";
 
 const ModalHub = () => {
   const { modalsList } = useContext(ModalContext);

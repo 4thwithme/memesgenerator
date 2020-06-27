@@ -4,6 +4,7 @@ export default gql`
   type Query {
     getUsers: [User]
     getMemes(author: String!, limit: Int!, offset: Int!): [Mem]
+    addToES: Boolean
   }
 
   type User {
@@ -30,7 +31,13 @@ export default gql`
   }
 
   type AddNewMemResponce {
-    res: Boolean!
+    file: String!
+    name: String!
+    internalUrl: String
+    memSrc: String!
+    createdAt: String!
+    author: String
+    tags: [String]!
   }
 
   input RegisterInput {
@@ -56,7 +63,7 @@ export default gql`
       internalUrl: String
       memSrc: String!
       createdAt: String!
-      author: String!
+      author: String
       tags: [String]!
     ): AddNewMemResponce!
   }

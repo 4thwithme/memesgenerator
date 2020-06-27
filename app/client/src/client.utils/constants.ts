@@ -1,7 +1,8 @@
 export const LIMIT = 10;
 
 export const MODAL_NAME = {
-  MEMES_CROP_MODAL: "LazyMemesCropModal"
+  MEMES_CROP_MODAL: "LazyMemesCropModal",
+  NEW_MEM_RESPONCE_MODAL: "LazyNewMemPesponceModal"
 };
 
 export const WINDOW_ASPECTS = [

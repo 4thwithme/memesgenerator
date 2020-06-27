@@ -19,6 +19,8 @@
     }
   }
 
+
+
   .text-list {
     padding: 0;
     margin: 0;
@@ -220,3 +222,33 @@
   position: absolute;
 }
 
+.mem-creator__btns-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & button.ui.fluid.button {
+    margin: 0;
+    &:first-child {
+      margin-right: 2px;
+    }
+    &:last-child {
+      margin-left: 2px;
+    }
+  }
+
+
+}
+
+.new-mem-responce-modal {
+  width: 420px;
+  height: auto;
+
+  & .img-crop__wrap {
+    cursor: copy;
+  }
+
+  & .mem-creator__btns-wrap {
+    margin-top: 4px;
+  }
+}

@@ -19,12 +19,12 @@ export interface IMem extends mongoose.Document {
   name: string;
   memSrc: string;
   createdAt: string;
-  author: string | IUser;
+  author: IUser | string | null;
   tags: string[];
 }
 
 export interface IMemModel extends mongoose.Model<IMem> {
-  uploadFileToAWS(internalUrl: string | null, file: File, callback: (a: object) => void): string;
+  uploadFileToAWS(internalUrl: string | null, file: File): Promise<any>;
 }
 
 export interface IArgMemInfo {

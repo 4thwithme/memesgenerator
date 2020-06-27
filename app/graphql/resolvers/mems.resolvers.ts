@@ -1,6 +1,8 @@
 import Mem from "../../models/Mem.model";
+import User from "../../models/User.model";
 
-import { IArgMemInfo, IArgsGetMemes } from "app/types";
+import { IArgMemInfo, IArgsGetMemes, IMem } from "app/types";
+import { ES } from "../../utils";
 
 export default {
   Query: {
@@ -11,27 +13,44 @@ export default {
         .limit(args.limit)
         .populate("author", "username")
         .then((res) => res)
-        .catch((err) => console.dir(err))
+        .catch((err) => console.dir(err)),
+
+    addToES: () => {
+      Mem.find()
+        .populate({ path: "author", select: "username" })
+        .then((res) => {
+          console.log(res);
+          ES.addMemesToIndexBulk(res);
+
+          return true;
+        })
+        .catch(console.error);
+    }
   },
 
   Mutations: {
-    addNewMem: async (_: any, args: IArgMemInfo): Promise<{ res: boolean }> => {
+    addNewMem: async (_: any, args: IArgMemInfo): Promise<IMem> => {
       const { file, name, internalUrl, memSrc, createdAt, author, tags } = args;
 
-      Mem.uploadFileToAWS(internalUrl, file, async (res: any) => {
-        const newMem = new Mem({
-          file: res.Location,
-          name,
-          memSrc,
-          createdAt,
-          author,
-          tags
-        });
+      const res = await Mem.uploadFileToAWS(internalUrl, file);
 
-        await newMem.save();
+      const newMem = new Mem({
+        file: res.Location,
+        name,
+        memSrc,
+        createdAt,
+        author,
+        tags
       });
 
-      return { res: true };
+      const user = (await User.findById(author)) || null;
+      const formatedUser = user ? { _id: author, username: user.username } : null;
+
+      await ES.addMemeToES(newMem, formatedUser);
+
+      await newMem.save();
+
+      return newMem;
     }
   }
 };

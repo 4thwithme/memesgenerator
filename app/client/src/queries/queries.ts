@@ -43,7 +43,7 @@ const ADD_NEW_MEM = gql`
     $internalUrl: String
     $memSrc: String!
     $createdAt: String!
-    $author: String!
+    $author: String
     $tags: [String]!
   ) {
     addNewMem(
@@ -55,7 +55,7 @@ const ADD_NEW_MEM = gql`
       author: $author
       tags: $tags
     ) {
-      res
+      file
     }
   }
 `;

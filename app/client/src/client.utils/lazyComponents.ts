@@ -1,10 +1,10 @@
 import { lazy } from "react";
 import { MODAL_NAME } from "./constants";
 
-const LazyMemesCropModal = lazy(() =>
-  import(/* webpackChunkName: "LazyMemesCropModal"*/ "../containers/MemesCreator/MemesCropModal")
+const LazyNewMemPesponceModal = lazy(() =>
+  import(/* webpackChunkName: "LazyMemesCropModal"*/ "../components/Modals/NewMemPesponceModal")
 );
 
 export default {
-  [MODAL_NAME.MEMES_CROP_MODAL]: LazyMemesCropModal
+  [MODAL_NAME.NEW_MEM_RESPONCE_MODAL]: LazyNewMemPesponceModal
 };

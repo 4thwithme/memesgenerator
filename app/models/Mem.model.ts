@@ -14,49 +14,47 @@ const MemSchema = new Schema({
   name: { type: String, required: true },
   memSrc: { type: String, required: true },
   createdAt: { type: String, required: true },
-  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  author: { type: Schema.Types.ObjectId, ref: "User" },
   tags: [{ type: String, required: true }]
 });
 
-MemSchema.statics.uploadFileToAWS = (
-  internalUrl: string | null,
-  file: any,
-  callback: (res: object) => void
-): void => {
-  if (internalUrl) {
-    console.log(internalUrl);
-    const file = fs.createWriteStream(DEST);
+MemSchema.statics.uploadFileToAWS = (internalUrl: string | null, file: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    if (internalUrl) {
+      console.log(internalUrl);
+      const file = fs.createWriteStream(DEST);
 
-    const request = https.get(internalUrl, (response) => {
-      if (response.statusCode !== 200) {
-        return console.error(response.statusCode);
-      }
+      const request = https.get(internalUrl, (response) => {
+        if (response.statusCode !== 200) {
+          return console.error(response.statusCode);
+        }
 
-      response.pipe(file);
-    });
-
-    file.on("finish", () =>
-      awsHelper.uploadFile(DEST, (res) => {
-        callback(res);
-        file.close();
-      })
-    );
-
-    request.on("error", (err) => {
-      fs.unlink(DEST, console.error);
-      return console.error(err.message);
-    });
-  } else {
-    const base = file.split("base64,")[1];
-
-    fs.writeFile(DEST, base, { encoding: "base64" }, async (err) => {
-      if (err) console.error(err);
-
-      awsHelper.uploadFile(DEST, (res) => {
-        callback(res);
+        response.pipe(file);
       });
-    });
-  }
+
+      file.on("finish", () =>
+        awsHelper.uploadFile(DEST, (res) => {
+          resolve(res);
+          file.close();
+        })
+      );
+
+      request.on("error", (err) => {
+        fs.unlink(DEST, console.error);
+        reject(err.message);
+      });
+    } else {
+      const base = file.split("base64,")[1];
+
+      fs.writeFile(DEST, base, { encoding: "base64" }, async (err) => {
+        if (err) console.error(err);
+
+        awsHelper.uploadFile(DEST, (res) => {
+          resolve(res);
+        });
+      });
+    }
+  });
 };
 
 export default model<IMem, IMemModel>("Mem", MemSchema);

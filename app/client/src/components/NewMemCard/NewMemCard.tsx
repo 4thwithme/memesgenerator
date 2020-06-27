@@ -44,16 +44,7 @@ const NewMemCard = ({
     // escape press -> discard current mem and back to loading compoennt
     return window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        setMem({
-          file: null,
-          url: null,
-          internalUrl: null,
-          name: "",
-          memSrc: "none",
-          createdAt: String(Date.now()),
-          author: user ? user.id : null,
-          tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
-        });
+        discardMem();
       }
     });
   });
@@ -65,6 +56,18 @@ const NewMemCard = ({
       croperRef.current.cropSelectRef && (croperRef.current.cropSelectRef.style.zIndex = 0);
     }
   }, [activeTool]);
+
+  const discardMem = () =>
+    setMem({
+      file: null,
+      url: null,
+      internalUrl: null,
+      name: "",
+      memSrc: "none",
+      createdAt: String(Date.now()),
+      author: user ? user.id : null,
+      tags: { "1": "", "2": "", "3": "", "4": "", "5": "" }
+    });
 
   const updateImage = async () => {
     if (src) {
@@ -112,6 +115,7 @@ const NewMemCard = ({
             onChange={(crop) => dispatch({ type: CROP, payload: crop })}
           />
         )}
+
         <MemTextList croperRef={croperRef} textList={textList} setTextList={setTextList} />
       </div>
 
@@ -154,9 +158,15 @@ const NewMemCard = ({
         })}
       </Card.Content>
 
-      <Button fluid color='teal' onClick={handleSubmit} disabled={isDisabled()}>
-        Submit
-      </Button>
+      <div className='mem-creator__btns-wrap'>
+        <Button fluid color='red' onClick={discardMem}>
+          Discard
+        </Button>
+
+        <Button fluid color='teal' onClick={handleSubmit} disabled={isDisabled()}>
+          Submit
+        </Button>
+      </div>
     </Card>
   );
 };
