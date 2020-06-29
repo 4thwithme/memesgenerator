@@ -3,7 +3,7 @@ export default (url: string): Promise<HTMLImageElement> =>
     const image = new Image();
 
     image.src = url.startsWith("blob") ? url : url + "?" + Date.now();
-    image.setAttribute("crossOrigin", "");
+    image.setAttribute("crossOrigin", "Anonymous");
 
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", (error) => reject(error));

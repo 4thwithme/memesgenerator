@@ -25,7 +25,7 @@ export interface IRegistrationValuesValidation {
 export interface IMemUpload {
   file: string | ArrayBuffer | null;
   url: string | null;
-  internalUrl: string | null;
+  externalUrl: string | null;
   name: string;
   memSrc: "none";
   createdAt: string;
@@ -59,7 +59,6 @@ export interface IAuthContext {
 export interface IPropsUploadZone {
   setMem: React.Dispatch<React.SetStateAction<IMemUpload>>;
   handleUpload: <T extends File>(acceptedFiles: T[], rejectedFiles: T[], event: DropEvent) => void;
-  handleUploadFromURL: (url: string) => void;
 }
 
 export interface IPropsNewMemCard {

@@ -127,7 +127,9 @@ const TextItem = ({
         fontSize: item.fontSize,
         lineHeight: 1,
         display: "block",
-        fontFamily: "Arial, sans-serif"
+        fontFamily: "Arial, sans-serif",
+        WebkitTextStrokeColor: "#000",
+        WebkitTextStrokeWidth: 2
       }}
       onInput={(e: any) => setMemText(e.target.innerText, e.target.offsetWidth)}
     />

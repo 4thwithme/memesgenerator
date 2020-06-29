@@ -18,13 +18,13 @@ const MemSchema = new Schema({
   tags: [{ type: String, required: true }]
 });
 
-MemSchema.statics.uploadFileToAWS = (internalUrl: string | null, file: any): Promise<any> => {
+MemSchema.statics.uploadFileToAWS = (externalUrl: string | null, file: any): Promise<any> => {
   return new Promise((resolve, reject) => {
-    if (internalUrl) {
-      console.log(internalUrl);
+    if (externalUrl) {
+      console.log(externalUrl);
       const file = fs.createWriteStream(DEST);
 
-      const request = https.get(internalUrl, (response) => {
+      const request = https.get(externalUrl, (response) => {
         if (response.statusCode !== 200) {
           return console.error(response.statusCode);
         }

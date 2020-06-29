@@ -21,7 +21,7 @@ const MemesUploader = () => {
   const [mem, setMem] = useState<IMemUpload>({
     file: null,
     url: null,
-    internalUrl: null,
+    externalUrl: null,
     name: "",
     memSrc: "none",
     createdAt: String(Date.now()),
@@ -45,7 +45,7 @@ const MemesUploader = () => {
       setMem((prev) => ({
         file: null,
         url: null,
-        internalUrl: null,
+        externalUrl: null,
         name: "",
         memSrc: "none",
         createdAt: String(Date.now()),
@@ -75,12 +75,6 @@ const MemesUploader = () => {
 
     file && reader.readAsDataURL(file);
   };
-
-  const handleUploadFromURL = (url: string) =>
-    setMem((prev) => ({
-      ...prev,
-      internalUrl: url
-    }));
 
   const handleOnNameChange = (e: any): void =>
     setMem({
@@ -119,7 +113,7 @@ const MemesUploader = () => {
         </Dimmer>
       )}
 
-      {mem.url ? (
+      {mem.url || (mem.externalUrl && mem.file) ? (
         <NewMemCard
           setMem={setMem}
           mem={mem}
@@ -129,11 +123,7 @@ const MemesUploader = () => {
           handleSubmit={handleSubmit}
         />
       ) : (
-        <UploadZone
-          handleUpload={handleUpload}
-          setMem={setMem}
-          handleUploadFromURL={handleUploadFromURL}
-        />
+        <UploadZone handleUpload={handleUpload} setMem={setMem} />
       )}
     </>
   );

@@ -24,7 +24,7 @@ export interface IMem extends mongoose.Document {
 }
 
 export interface IMemModel extends mongoose.Model<IMem> {
-  uploadFileToAWS(internalUrl: string | null, file: File): Promise<any>;
+  uploadFileToAWS(externalUrl: string | null, file: File | null | undefined): Promise<any>;
 }
 
 export interface IArgMemInfo {
@@ -33,7 +33,7 @@ export interface IArgMemInfo {
   memSrc: string;
   createdAt: number;
   author: string;
-  internalUrl: string | null;
+  externalUrl: string | null;
   tags: string[];
 }
 

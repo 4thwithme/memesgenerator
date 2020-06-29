@@ -45,6 +45,8 @@ export default async function(
     textArr.length &&
       textArr.forEach((item) => {
         ctx.fillStyle = item.color;
+        ctx.lineWidth = 4 * widthMultiplicator;
+        ctx.strokeStyle = "black";
         ctx.font = `bold ${+item.fontSize * widthMultiplicator}px/1 Arial, sans-serif`;
 
         splitLinesForCanvas(

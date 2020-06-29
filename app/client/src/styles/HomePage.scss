@@ -7,7 +7,6 @@
   flex-direction: column;
   padding: 40px 0;
   
-
   .img-crop {
     
     &__wrap {
@@ -18,8 +17,6 @@
       align-items: center;
     }
   }
-
-
 
   .text-list {
     padding: 0;
@@ -34,7 +31,7 @@
     & .text-list-item {
       position: absolute;
       display: flex;
-      
+            
       &__input {
         outline: none;
         background-color: transparent;

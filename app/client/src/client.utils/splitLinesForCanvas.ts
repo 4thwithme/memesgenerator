@@ -17,6 +17,7 @@ export default (
     const testWidth = +context.measureText(testLine).width.toFixed(1);
 
     if (testWidth > +maxWidth.toFixed(1)) {
+      context.strokeText(line, x, currentHeight);
       context.fillText(line, x, currentHeight);
 
       line = words[n] + " ";
@@ -26,5 +27,6 @@ export default (
     }
   }
 
+  context.strokeText(line, x, currentHeight);
   context.fillText(line, x, currentHeight);
 };

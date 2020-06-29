@@ -38,7 +38,7 @@ const NewMemCard = ({
 
   const croperRef: any = useRef();
 
-  const src = mem.internalUrl || mem.url;
+  const src = mem.externalUrl || mem.url;
 
   useDidMount(() => {
     // escape press -> discard current mem and back to loading compoennt
@@ -61,7 +61,7 @@ const NewMemCard = ({
     setMem({
       file: null,
       url: null,
-      internalUrl: null,
+      externalUrl: null,
       name: "",
       memSrc: "none",
       createdAt: String(Date.now()),
@@ -105,7 +105,6 @@ const NewMemCard = ({
       <div className='img-crop__wrap'>
         {src && (
           <ReactCrop
-            crossorigin='anonymous'
             ref={croperRef}
             onImageLoaded={() => setImageParams()}
             disabled={activeTool !== "crop"}

@@ -30,9 +30,9 @@ export default {
 
   Mutations: {
     addNewMem: async (_: any, args: IArgMemInfo): Promise<IMem> => {
-      const { file, name, internalUrl, memSrc, createdAt, author, tags } = args;
+      const { file, name, externalUrl, memSrc, createdAt, author, tags } = args;
 
-      const res = await Mem.uploadFileToAWS(internalUrl, file);
+      const res = await Mem.uploadFileToAWS(externalUrl, file);
 
       const newMem = new Mem({
         file: res.Location,
@@ -51,6 +51,15 @@ export default {
       await newMem.save();
 
       return newMem;
+    },
+
+    uploadFromUrlToAmazon: async (
+      _: any,
+      { externalUrl }: { externalUrl: string }
+    ): Promise<{ url: string }> => {
+      const res = await Mem.uploadFileToAWS(externalUrl, null);
+
+      return { url: res.Location };
     }
   }
 };

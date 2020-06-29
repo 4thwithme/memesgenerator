@@ -33,11 +33,15 @@ export default gql`
   type AddNewMemResponce {
     file: String!
     name: String!
-    internalUrl: String
+    externalUrl: String
     memSrc: String!
     createdAt: String!
     author: String
     tags: [String]!
+  }
+
+  type UploadFromUrlToAmazonResponce {
+    url: String!
   }
 
   input RegisterInput {
@@ -60,11 +64,13 @@ export default gql`
     addNewMem(
       file: Upload!
       name: String!
-      internalUrl: String
+      externalUrl: String
       memSrc: String!
       createdAt: String!
       author: String
       tags: [String]!
     ): AddNewMemResponce!
+
+    uploadFromUrlToAmazon(externalUrl: String!): UploadFromUrlToAmazonResponce!
   }
 `;

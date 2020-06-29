@@ -40,7 +40,7 @@ const ADD_NEW_MEM = gql`
   mutation addNewMem(
     $file: Upload!
     $name: String!
-    $internalUrl: String
+    $externalUrl: String
     $memSrc: String!
     $createdAt: String!
     $author: String
@@ -49,7 +49,7 @@ const ADD_NEW_MEM = gql`
     addNewMem(
       file: $file
       name: $name
-      internalUrl: $internalUrl
+      externalUrl: $externalUrl
       memSrc: $memSrc
       createdAt: $createdAt
       author: $author
@@ -77,4 +77,18 @@ const FETCH_MEMES_BY_AUTHOR_ID = gql`
   }
 `;
 
-export default { REGISTER_USER, LOGIN_USER, ADD_NEW_MEM, FETCH_MEMES_BY_AUTHOR_ID };
+const UPLOAD_FROM_EXTERNAL_URL_TO_AMAZON = gql`
+  mutation uploadFromUrlToAmazon($externalUrl: String!) {
+    uploadFromUrlToAmazon(externalUrl: $externalUrl) {
+      url
+    }
+  }
+`;
+
+export default {
+  REGISTER_USER,
+  LOGIN_USER,
+  ADD_NEW_MEM,
+  FETCH_MEMES_BY_AUTHOR_ID,
+  UPLOAD_FROM_EXTERNAL_URL_TO_AMAZON
+};
