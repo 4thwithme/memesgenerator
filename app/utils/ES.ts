@@ -50,7 +50,7 @@ export default {
 
     console.log("count", count);
   },
-
+  //add meme to ES before save to DB
   addMemeToES: async (mem: IMem, authorObj: StringObject | null) => {
     await client.index({
       index: ES_INDEX,
@@ -63,5 +63,26 @@ export default {
         author: authorObj || { _id: null, username: null }
       }
     });
+  },
+  // ES search
+  searhMemes: async (query: string, limit: number = 10, offset: number = 0) => {
+    const { body } = await client.search({
+      index: ES_INDEX,
+      type: ES_TYPE,
+      body: {
+        query: {
+          multi_match: {
+            query,
+            fields: ["name", "tags"]
+          }
+        },
+        from: offset,
+        size: offset + limit,
+        sort: [],
+        aggs: {}
+      }
+    });
+
+    return body.hits.hits;
   }
 };

@@ -5,6 +5,7 @@ export default gql`
     getUsers: [User]
     getMemes(author: String!, limit: Int!, offset: Int!): [Mem]
     addToES: Boolean
+    searchMemes(query: String!, limit: Int!, offset: Int!): [Mem]
   }
 
   type User {

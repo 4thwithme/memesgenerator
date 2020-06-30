@@ -1,4 +1,5 @@
 import { DropEvent } from "react-dropzone";
+import { QueryLazyOptions } from "@apollo/react-hooks";
 
 export interface StringObject {
   [key: string]: string;
@@ -121,3 +122,24 @@ export interface IMemText {
 }
 
 export type IActiveTool = "text" | "crop" | "square" | null;
+
+export interface IControlBar {
+  setSearch: React.Dispatch<React.SetStateAction<IMemSearchState>>;
+  search: IMemSearchState;
+  getMemesByQuery: (
+    options?:
+      | QueryLazyOptions<{
+          query: string;
+          limit: number;
+          offset: number;
+        }>
+      | undefined
+  ) => void;
+}
+
+export interface IMemSearchState {
+  query: string;
+  list: IMem[];
+  isActive: boolean;
+  offset: number;
+}

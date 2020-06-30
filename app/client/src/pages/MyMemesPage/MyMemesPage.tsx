@@ -1,19 +1,36 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Dimmer, Loader, Card, Image, Icon } from "semantic-ui-react";
-import { useQuery } from "@apollo/react-hooks";
+import { Dimmer, Loader } from "semantic-ui-react";
+import { useQuery, useLazyQuery } from "@apollo/react-hooks";
 import Scrollbars from "react-custom-scrollbars";
 
 import QUERIES from "../../queries/queries";
 import "../../styles/MyMemesPage.scss";
 import { LIMIT } from "../../client.utils/constants";
 import { AuthContext } from "../../context/AuthProvider/AuthProvider";
-import convertToDate from "../../client.utils/convertToDate";
 
-import { IMem } from "../../client.types";
+import ControlBar from "../../containers/ControlBar/ControlBar";
+import MemCard from "../../components/MemCard/MemCard";
+
+import { IMem, IMemSearchState } from "../../client.types";
 
 const MyMemesPage = () => {
-  const [memes, setMemes] = useState([]);
   const { user } = useContext(AuthContext);
+
+  // const [memesAutor, setMemesAuthor] = useState(user ? user.id : "all");
+  const [memes, setMemes] = useState([]);
+  const [search, setSearch] = useState<IMemSearchState>({
+    query: "",
+    list: [],
+    offset: 0,
+    isActive: false
+  });
+
+  const [
+    getMemesByQuery,
+    { loading: searchLoading, data: searchData, fetchMore: searchFetchMore }
+  ] = useLazyQuery(QUERIES.SEARCH_MEMES, {
+    variables: { query: search.query, limit: LIMIT, offset: 0 }
+  });
 
   const { loading, data, fetchMore } = useQuery(QUERIES.FETCH_MEMES_BY_AUTHOR_ID, {
     variables: { author: user ? user.id : "all", limit: LIMIT, offset: 0 }
@@ -23,66 +40,70 @@ const MyMemesPage = () => {
     data && setMemes(data.getMemes);
   }, [data]);
 
-  const handleScroll = (e: any) => {
+  useEffect(() => {
+    searchData && setSearch((prev) => ({ ...prev, list: searchData.searchMemes }));
+  }, [searchData]);
+
+  const handleScroll = (e: any, type: "search" | "memes") => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
 
     if (clientHeight + scrollTop === scrollHeight) {
       console.log("upload new memes");
 
-      fetchMore({
-        variables: { author: user ? user.id : "all", limit: LIMIT, offset: memes.length },
-        updateQuery: (prevData, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return prevData;
-          return Object.assign({}, prevData, {
-            getMemes: [...prevData.getMemes, ...fetchMoreResult.getMemes]
-          });
-        }
-      });
+      if (type === "search") {
+        searchFetchMore({
+          variables: {
+            query: search.query,
+            limit: LIMIT,
+            offset: search.offset
+          },
+          updateQuery: (prevData, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prevData;
+            return Object.assign({}, prevData, {
+              getMemes: [...prevData.searchMemes, ...fetchMoreResult.searchMemes]
+            });
+          }
+        });
+      } else {
+        fetchMore({
+          variables: { author: user ? user.id : "all", limit: LIMIT, offset: memes.length },
+          updateQuery: (prevData, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prevData;
+            return Object.assign({}, prevData, {
+              getMemes: [...prevData.getMemes, ...fetchMoreResult.getMemes]
+            });
+          }
+        });
+      }
     }
   };
 
   return (
     <main className='mem-page-wrap'>
-      {loading && (
+      {(loading || searchLoading) && (
         <Dimmer active>
           <Loader />
         </Dimmer>
       )}
 
       <div className='memes-list'>
-        <Scrollbars autoHide onScroll={handleScroll}>
-          {memes.length
-            ? memes.map((mem: IMem) => {
-                return (
-                  <Card key={mem.id} fluid className='mem-card'>
-                    <Image src={mem.file} wrapped ui={false} className='mem-img' />
-                    <Card.Content>
-                      <Card.Header className='mem-name'>{mem.name.toUpperCase()}</Card.Header>
-                      <Card.Meta>
-                        <span className='date'>{convertToDate(mem.createdAt)}</span>
-                      </Card.Meta>
-                      <Card.Description>
-                        Author:{" "}
-                        {typeof mem.author === "object" && mem.author
-                          ? mem.author.username
-                          : "NoNameNPC"}
-                      </Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                      {Object.values(mem.tags).map((tag, i) => {
-                        return (
-                          <div className='tag-wrap' key={i}>
-                            <Icon size='small' name='hashtag' />
-                            <span>{tag}</span>
-                          </div>
-                        );
-                      })}
-                    </Card.Content>
-                  </Card>
-                );
-              })
-            : null}
-        </Scrollbars>
+        <ControlBar setSearch={setSearch} getMemesByQuery={getMemesByQuery} search={search} />
+
+        {search.isActive ? (
+          <Scrollbars autoHide onScroll={(e) => handleScroll(e, "search")}>
+            {!!search.list.length &&
+              search.list.map((mem: IMem) => {
+                return <MemCard mem={mem} key={mem.id} />;
+              })}
+          </Scrollbars>
+        ) : (
+          <Scrollbars autoHide onScroll={(e) => handleScroll(e, "memes")}>
+            {!!memes.length &&
+              memes.map((mem: IMem) => {
+                return <MemCard mem={mem} key={mem.id} />;
+              })}
+          </Scrollbars>
+        )}
       </div>
     </main>
   );

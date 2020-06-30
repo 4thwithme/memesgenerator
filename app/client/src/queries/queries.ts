@@ -77,6 +77,23 @@ const FETCH_MEMES_BY_AUTHOR_ID = gql`
   }
 `;
 
+const SEARCH_MEMES = gql`
+  query searchMemes($query: String!, $limit: Int!, $offset: Int!) {
+    searchMemes(query: $query, limit: $limit, offset: $offset) {
+      id
+      name
+      tags
+      createdAt
+      author {
+        id
+        username
+      }
+      file
+      memSrc
+    }
+  }
+`;
+
 const UPLOAD_FROM_EXTERNAL_URL_TO_AMAZON = gql`
   mutation uploadFromUrlToAmazon($externalUrl: String!) {
     uploadFromUrlToAmazon(externalUrl: $externalUrl) {
@@ -90,5 +107,6 @@ export default {
   LOGIN_USER,
   ADD_NEW_MEM,
   FETCH_MEMES_BY_AUTHOR_ID,
-  UPLOAD_FROM_EXTERNAL_URL_TO_AMAZON
+  UPLOAD_FROM_EXTERNAL_URL_TO_AMAZON,
+  SEARCH_MEMES
 };

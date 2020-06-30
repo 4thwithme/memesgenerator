@@ -1,3 +1,5 @@
+import * as mongoose from "mongoose";
+
 import Mem from "../../models/Mem.model";
 import User from "../../models/User.model";
 
@@ -6,7 +8,7 @@ import { ES } from "../../utils";
 
 export default {
   Query: {
-    getMemes: (_: any, { author, ...args }: IArgsGetMemes) =>
+    getMemes: (_: any, { author, ...args }: IArgsGetMemes): Promise<void | IMem[]> =>
       Mem.find(author === "all" ? {} : { author })
         .sort({ createdAt: -1 })
         .skip(args.offset)
@@ -19,12 +21,25 @@ export default {
       Mem.find()
         .populate({ path: "author", select: "username" })
         .then((res) => {
-          console.log(res);
           ES.addMemesToIndexBulk(res);
 
           return true;
         })
         .catch(console.error);
+    },
+
+    searchMemes: async (
+      _: any,
+      { query, limit, offset }: { query: string; limit: number; offset: number }
+    ) => {
+      const res: IMem[] = await ES.searhMemes(query, limit, offset);
+
+      const ids = res.map((item) => mongoose.Types.ObjectId(item._id));
+
+      return await Mem.find()
+        .where("_id")
+        .in(ids)
+        .populate({ path: "author", select: "username" });
     }
   },
 

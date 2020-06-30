@@ -15,4 +15,24 @@
   .memes-list {
     height: calc(100vh - 34px);
   }
+
+  .control-bar {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+
+      .react-toggle {
+        margin-right: 10px;
+      }
+    }
+
+    .ui.fluid.action.input {
+      min-width: 300px;
+    }
+  }
 }
